@@ -20,6 +20,7 @@
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option use_console_runner="0" />
 				<Compiler>
 					<Add option="-O2" />
 				</Compiler>
@@ -31,6 +32,15 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="examples/colorbox.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="examples/examples.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="examples/screensaver.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="framebuffer.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -38,6 +48,10 @@
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="shapes.h" />
+		<Unit filename="simple_shapes.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>

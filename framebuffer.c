@@ -63,9 +63,7 @@ void fb_flush(void *dst, const void *src)
 	const fb_word dst_sz = ((struct framebuffer *)dst)->xres * ((struct framebuffer *)dst)->yres;
 	memcpy(((struct framebuffer *)dst)->buffer, ((struct framebuffer *)src)->buffer, src_sz > dst_sz ? dst_sz : src_sz);
 }
-void fb_flush2(void *dst, const void *src, fb_word xoff, fb_word yoff)
-{ fb_flush3(dst, src, xoff, yoff, ((struct framebuffer *)src)->xres, ((struct framebuffer *)src)->yres); }
-void fb_flush3(void *dst, const void *src, fb_word xoff, fb_word yoff, fb_word xmax, fb_word ymax)
+void fb_pri_flush3(void *dst, const void *src, fb_word xoff, fb_word yoff, fb_word xmax, fb_word ymax, uint8_t blend)
 {
 	register fb_word x, y;
 	struct framebuffer *dfb = dst;
@@ -75,8 +73,14 @@ void fb_flush3(void *dst, const void *src, fb_word xoff, fb_word yoff, fb_word x
 	if (dfb->hardware) return; // can't write like this to a hardware buffer
 	for (y = 0; y < sfb->yres && y + yoff < dfb->yres && y < ymax; ++y)
 		for(x = 0; x < sfb->xres && (x + xoff < dfb->xres) && x < xmax; ++x)
-			p_dfb[(y + yoff) * dfb->xres + (x + xoff)] = fb_pri_blend(p_dfb[(y + yoff) * dfb->xres + (x + xoff)], p_sfb[y * sfb->xres + x]);
+			p_dfb[(y + yoff) * dfb->xres + (x + xoff)] = blend ? fb_pri_blend(p_dfb[(y + yoff) * dfb->xres + (x + xoff)], p_sfb[y * sfb->xres + x]) : p_sfb[y * sfb->xres + x];
 }
+void fb_pri_flush2(void *dst, const void *src, fb_word xoff, fb_word yoff, uint8_t blend)
+{ fb_pri_flush3(dst, src, xoff, yoff, ((struct framebuffer *)src)->xres, ((struct framebuffer *)src)->yres, blend); }
+void fb_flush2(void *dst, const void *src, fb_word xoff, fb_word yoff) { fb_pri_flush2(dst, src, xoff, yoff, 1); }
+void fb_flush2_r(void *dst, const void *src, fb_word xoff, fb_word yoff) { fb_pri_flush2(dst, src, xoff, yoff, 0); }
+void fb_flush3(void *dst, const void *src, fb_word xoff, fb_word yoff, fb_word xmax, fb_word ymax) { fb_pri_flush3(dst, src, xoff, yoff, xmax, ymax, 1); }
+void fb_flush3_r(void *dst, const void *src, fb_word xoff, fb_word yoff, fb_word xmax, fb_word ymax) { fb_pri_flush3(dst, src, xoff, yoff, xmax, ymax, 0); }
 void fb_clear(void *fb) { memset(((struct framebuffer *)fb)->buffer, 0, ((struct framebuffer *)fb)->xres * ((struct framebuffer *)fb)->yres); }
 void fb_close(void *fb)
 {
