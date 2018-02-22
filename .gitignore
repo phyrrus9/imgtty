@@ -1,0 +1,28 @@
+[Bb]in/*  
+![Bb]in/data/  
+[Bb]uild/  
+[Oo]bj/  
+*.o  
+[Dd]ebug*/  
+[Rr]elease*/  
+*.mode*  
+*.app/  
+*.pyc  
+*.log  
+*.save
+#################  
+## Code::Blocks  
+#################  
+
+*.depend  
+*.layout  
+
+############  
+## Windows  
+############  
+
+# Windows image file caches  
+Thumbs.db  
+
+# Folder config file  
+Desktop.ini
